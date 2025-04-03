@@ -1,0 +1,25 @@
+iotb:
+  # THe URL of your IoT Bridge instance
+  url: https://bridge-us.tartabit.com
+  # The API suffix, for most cases this is /api/v1/
+  api_suffix: /api/v1/
+  # API token, should be a token from the Root account on your instance.
+  token: "AT:yDp...EH79c"
+  debug: true
+onboarding:
+  parentAccountId: "67ec91f43b4253a388ad6cd7"
+templates:
+  protocol:
+    - name: UDP (ASCII, Binary, JSON)
+      solution: udp_to_generic.json
+    #- name: UDP (CBOR)
+    #  solution: udp_cbor_to_generic.json
+    - name: CoAP (ASCII, Binary, JSON))
+      solution: coap_to_generic.json
+    #- name: CoAP (CBOR))
+    #  solution: coap_cbor_to_generic.json
+  target:
+    - name: Azure IoT Hub
+      solution: generic_to_azure-iot.json
+    - name: HTTPS
+      solution: generic_to_https.json

@@ -1,0 +1,6 @@
+Flask==2.3.3
+requests==2.31.0
+beautifulsoup4==4.12.2
+gunicorn==23.0.0
+pyiotb==0.1.1
+PyYAML==6.0.2

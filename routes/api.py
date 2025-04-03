@@ -1,10 +1,21 @@
 import json
 
-from flask import Blueprint, request, jsonify
+import requests
+from flask import Blueprint, request, jsonify, redirect
 import config
 import iotb
 
 bp = Blueprint("api", __name__)
+
+@bp.route('/api/iotb/<account_id>', methods=['POST'])
+def iotb_login(account_id):
+    # Extract the JSON data from the request
+
+    response = iotb.client.request("POST", "login", query={"emailAddress": account_id+'@tartabit.com', "password": account_id+'@A3'},
+                            headers={"Content-Type": "application/x-www-form-urlencoded"})
+
+    # Redirect to the specified URL with the JSON response from response.body
+    return redirect(f"https://bridge-us.tartabit.com/login?auth={json.dumps(response.body)}")
 
 @bp.route('/api/onboard', methods=['POST'])
 def onboard():
@@ -13,8 +24,6 @@ def onboard():
     protocol = request.form.get('protocol')
     target = request.form.get('target')
     source_cidr = request.form.get('source_cidr')
-
-    print(request.form)
 
     results = []
 
@@ -62,6 +71,11 @@ def onboard():
             account = result.body
             account_id = account['id']
             results.append(f"Created account [{account['name']}] with ID: {account_id}")
+
+            result = iotb.client.request('POST', 'user', body={'firstName': new_account_name, 'lastName': new_account_name, 'email': account_id + '@tartabit.com', 'password': account_id+'@A3', 'role': 'admin'},
+                                         account_id=account_id)
+            if result.status == 201:
+                results.append(f"Created user with ID: {result.body['id']}")
     else:
         # lookup an existing account.
         account = iotb.client.request('GET', 'account/'+account_id, account_id=config.onboarding.parentAccountId).body

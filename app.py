@@ -15,7 +15,5 @@ iotb.configure()
 from routes import register_blueprints
 register_blueprints(app)
 
-iotb.client.request("GET", "service")
-
 if __name__ == '__main__':
     app.run()

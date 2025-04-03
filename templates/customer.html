@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('index.index') }}" class="nav-link">Back to Home</a>
+        <h1>Account Information</h1>
+        <table>
+            <tr>
+                <th>ID</th>
+                <td>{{ account.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ account.name }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ account.status }}</td>
+            </tr>
+            <tr>
+                <th>Date Created</th>
+                <td>{{ account.dateCreated }}</td>
+            </tr>
+        </table>
+
+        <form action="/api/iotb/{{ account.id }}" method="post" target="_blank">
+            <button type="submit">Login to IoT Bridge</button>
+        </form>
+
+        <h1>Service Health</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Service Name</th>
+                    <th>Status</th>
+                    <th>Last 1 Day (Success %)</th>
+                    <th>Last Activity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                    <tr>
+                        <td>{{ service.name }}</td>
+                        <td>
+                            {% if service.status == 'healthy' or service.status == 'connected' %}
+                                <span style="color: green;">✔</span>
+                            {% elif service.status == 'error' %}
+                                <span style="color: red;">✖</span>
+                            {% elif service.status == 'new' %}
+                                <span style="color: blue;">*</span>
+                            {% else %}
+                                <span style="color: grey;">ℹ</span>
+                            {% endif %}
+                            {{ service.status }}
+                        </td>
+                        <td>
+                            {% if service.metrics.lastDay %}
+                                {{ service.metrics.lastDay.count }} ({{ service.metrics.lastDay.pct }} successful)
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>{{ service.dateLastActivity }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h1>Log Messages</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Level</th>
+                    <th>Service Name</th>
+                    <th>Trigger Name</th>
+                    <th>Message</th>
+                    <th>Error</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                    <tr>
+                        <td>{{ log.ts }}</td>
+                        <td>{{ log.level }}</td>
+                        <td>{{ log.serviceName }}</td>
+                        <td>{{ log.triggerName }}</td>
+                        <td>{{ log.message }}</td>
+                        <td>{{ log.error }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h1>Event Logs</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Service Name</th>
+                    <th>Type</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event.ts }}</td>
+                        <td>{{ event.service.name }}</td>
+                        <td>{{ event.type }}</td>
+                        <td>
+                            <button onclick="toggleData('{{ loop.index }}')">Expand</button>
+                            <pre id="data-{{ loop.index }}" style="display:none;">{{ event.data | tojson(indent=2) }}</pre>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function toggleData(index) {
+            var dataElement = document.getElementById('data-' + index);
+            if (dataElement.style.display === 'none') {
+                dataElement.style.display = 'block';
+            } else {
+                dataElement.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

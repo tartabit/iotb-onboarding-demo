@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Onboarding</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script>
+        function updateProtocolFields() {
+            const protocolSelect = document.getElementById('protocol');
+            const selectedProtocol = protocolSelect.options[protocolSelect.selectedIndex].value;
+            const protocolDefs = {{ protocols|tojson }};
+            const protocol = protocolDefs.find(p => p.name === selectedProtocol);
+            const protocolFieldsContainer = document.getElementById('protocol-fields');
+
+            protocolFieldsContainer.innerHTML = '';
+
+            if (protocol && protocol.def) {
+                protocol.def.forEach(field => {
+                    const fieldDiv = document.createElement('div');
+                    fieldDiv.className = 'form-group';
+
+                    const label = document.createElement('label');
+                    label.setAttribute('for', 'protodef-'+field.key);
+                    label.textContent = field.name;
+                    fieldDiv.appendChild(label);
+
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.id = 'protodef-'+field.key;
+                    input.name = 'protodef-'+field.key;
+                    input.value = field.value || '';
+                    fieldDiv.appendChild(input);
+
+                    protocolFieldsContainer.appendChild(fieldDiv);
+                });
+            }
+        }
+
+        function updateTargetFields() {
+            const targetSelect = document.getElementById('target');
+            const selectedTarget = targetSelect.options[targetSelect.selectedIndex].value;
+            const targetDefs = {{ targets|tojson }};
+            const target = targetDefs.find(p => p.name === selectedTarget);
+            const targetFieldsContainer = document.getElementById('target-fields');
+
+            targetFieldsContainer.innerHTML = '';
+
+            if (target && target.def) {
+                target.def.forEach(field => {
+                    const fieldDiv = document.createElement('div');
+                    fieldDiv.className = 'form-group';
+
+                    const label = document.createElement('label');
+                    label.setAttribute('for', 'targetdef-'+field.key);
+                    label.textContent = field.name;
+                    fieldDiv.appendChild(label);
+
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.id = 'targetdef-'+field.key;
+                    input.name = 'targetdef-'+field.key;
+                    input.value = field.value || '';
+                    fieldDiv.appendChild(input);
+
+                    targetFieldsContainer.appendChild(fieldDiv);
+                });
+            }
+        }
+
+        function updateAccountFields() {
+            const accountSelect = document.getElementById('account');
+            const selectedAccount = accountSelect.options[accountSelect.selectedIndex].value;
+            const newAccountField = document.getElementById('new-account-field');
+
+            if (selectedAccount === 'new') {
+                newAccountField.style.display = 'block';
+            } else {
+                newAccountField.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('protocol').addEventListener('change', updateProtocolFields);
+            document.getElementById('target').addEventListener('change', updateTargetFields);
+            document.getElementById('account').addEventListener('change', updateAccountFields);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('index.index') }}" class="nav-link">Back to Home</a>
+        <h1>Onboard</h1>
+        <form action="/api/onboard" method="post">
+            <div class="step">
+                <h2>1. Select account</h2>
+                <p>Select an existing account, or select "<span class="italic">Create new account</span>" to create a new customer account.</p>
+                <div class="form-group">
+                    <label for="account">Select account:</label>
+                    <select id="account" name="account">
+                        <option value="" selected disabled>Select an account</option>
+                        {% for account in accounts %}
+                            <option value="{{ account.id }}">{{ account.name }}</option>
+                        {% endfor %}
+                        <option value="new" class="italic">Create new account</option>
+                    </select>
+                </div>
+                <div id="new-account-field" class="form-group" style="display: none;">
+                    <label for="new_account_name">New account name:</label>
+                    <input type="text" id="new_account_name" name="new_account_name">
+                </div>
+            </div>
+            <div class="step">
+                <h2>2. Select your protocol</h2>
+                <p>Select the protocol the devices will use to connect to the cloud.</p>
+                <div class="form-group">
+                    <label for="protocol">Select your protocol:</label>
+                    <select id="protocol" name="protocol">
+                        <option value="" selected disabled>Select a protocol</option>
+                        {% for protocol in protocols %}
+                            <option value="{{ protocol.name }}">{{ protocol.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="fields-container">
+                    <div id="protocol-fields"></div>
+                </div>
+            </div>
+            <div class="step">
+                <h2>3. Select target</h2>
+                <p>Select the transport to send data to the customer's cloud services.</p>
+                <div class="form-group">
+                    <label for="target">Target:</label>
+                    <select id="target" name="target">
+                        <option value="" selected disabled>Select a target</option>
+                        {% for target in targets %}
+                            <option value="{{ target.name }}">{{ target.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <div id="fields-container">
+                        <div id="target-fields"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <h2>4. Source CIDR</h2>
+                <p>For private connectivity, configure the source IP address range for the customer's devices.</p>
+                <div class="form-group">
+                    <label for="source_cidr">Source CIDR: (optional)</label>
+                    <input type="text" id="source_cidr" name="source_cidr">
+                </div>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

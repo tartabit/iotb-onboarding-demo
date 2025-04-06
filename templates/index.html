@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('lnf.styles') }}">
 </head>
 <body>
     <div class="container">
+        <img src="{{ url_for('lnf.logo') }}" alt="Logo" class="logo" height="50">
         <h1>CSP Onboarding Demonstration</h1>
         <p>This demonstration shows you an example of simple integration that can be emdedded anywhere and enable fast, reliable LPWA device to cloud integration.</p>
         <table style="width: 100%; border: none;">

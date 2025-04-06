@@ -10,5 +10,8 @@ def register_blueprints(app: Flask):
     from .index import bp as index_bp
     app.register_blueprint(index_bp)
 
+    from .lnf import bp as lnf_bp
+    app.register_blueprint(lnf_bp)
+
     from .onboarding import bp as onboarding_bp
     app.register_blueprint(onboarding_bp)

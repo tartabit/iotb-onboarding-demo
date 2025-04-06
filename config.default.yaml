@@ -19,7 +19,26 @@ templates:
     #- name: CoAP (CBOR))
     #  solution: coap_cbor_to_generic.json
   target:
+    - name: Azure Cosmos DB
+      solution: generic_to_azure-cosmosdb.json
+    - name: Azure Event Hub
+      solution: generic_to_azure-eventhub.json
     - name: Azure IoT Hub
       solution: generic_to_azure-iot.json
+    - name: Azure Log Analytics
+      solution: generic_to_azure-log-analytics.json
     - name: HTTPS
       solution: generic_to_https.json
+lnf:
+  "localhost:5002":
+    logo: "https://www.gi-de.com/files/_processed_/5/9/csm_g_d-logo_9e5b75dac5.png"
+    colors:
+      button: '#040066'
+      button_hover: '#1fcee3'
+      heading: '#040066'
+  default:
+    logo: "https://docs.tartabit.com/logo-corp-margin.png"
+    colors:
+      button: '#007bff'
+      button-hover: '#0056b3'
+      heading: '#040066'

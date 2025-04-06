@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Onboarding</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('lnf.styles') }}">
     <script>
         function updateProtocolFields() {
             const protocolSelect = document.getElementById('protocol');
@@ -89,6 +89,7 @@
 <body>
     <div class="container">
         <a href="{{ url_for('index.index') }}" class="nav-link">Back to Home</a>
+        <img src="{{ url_for('lnf.logo') }}" alt="Logo" class="logo" height="50">
         <h1>Onboard</h1>
         <form action="/api/onboard" method="post">
             <div class="step">

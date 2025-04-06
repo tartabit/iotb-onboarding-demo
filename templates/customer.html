@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Customer Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('lnf.styles') }}">
 </head>
 <body>
     <div class="container">
         <a href="{{ url_for('index.index') }}" class="nav-link">Back to Home</a>
+        <img src="{{ url_for('lnf.logo') }}" alt="Logo" class="logo" height="50">
         <h1>Account Information</h1>
         <table>
             <tr>
@@ -59,7 +60,7 @@
                             {{ service.status }}
                         </td>
                         <td>
-                            {% if service.metrics.lastDay %}
+                            {% if service.metrics and service.metrics.lastDay %}
                                 {{ service.metrics.lastDay.count }} ({{ service.metrics.lastDay.pct }} successful)
                             {% else %}
                                 N/A
@@ -71,6 +72,7 @@
             </tbody>
         </table>
 
+        {%  if logs %}
         <h1>Log Messages</h1>
         <table>
             <thead>
@@ -96,7 +98,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% endif %}
 
+        {% if events %}
         <h1>Event Logs</h1>
         <table>
             <thead>
@@ -121,6 +125,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% endif %}
     </div>
     <script>
         function toggleData(index) {

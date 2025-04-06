@@ -40,5 +40,7 @@ def customer(account_id):
                 else:
                     period['pct'] = '-'
             service['metrics'] = status
+        else:
+            service['metrics'] = {}
 
     return render_template('customer.html', account=acct, services=services, logs=logs, events=events)

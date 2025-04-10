@@ -14,4 +14,8 @@ def get_solution(solution: str):
 
 def configure():
     global client
-    client = IotbClient(url=config.iotb.url + config.iotb.api_suffix, token=config.iotb.token, debug=config.iotb.debug)
+    client = IotbClient(
+        url=config.iotb.url + config.iotb.api_suffix,
+        token=config.iotb.token,
+        debug=config.iotb.debug,
+        insecure=config.iotb.insecure)

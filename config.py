@@ -8,6 +8,7 @@ class Iotb:
     api_suffix: str
     token: str
     debug: bool
+    insecure: bool
 
 @dataclass
 class Protocol:

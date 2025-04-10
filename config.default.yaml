@@ -6,6 +6,8 @@ iotb:
   # API token, should be a token from the Root account on your instance.
   token: "AT:yDp...EH79c"
   debug: true
+  # if true, certificate validation will be skipped.
+  insecure: false
 onboarding:
   parentAccountId: "67ec91f43b4253a388ad6cd7"
 templates:

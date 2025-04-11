@@ -6,7 +6,7 @@ from pyiotb import IotbClient
 client: IotbClient
 
 def get_solution(solution: str):
-    response = requests.get(config.iotb.url + '/solutions/' + solution)
+    response = requests.get(config.iotb.url + '/solutions/' + solution, verify=not config.iotb.insecure)
     if response.status_code == 404:
         return None
     data = response.json()

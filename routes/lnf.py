@@ -20,4 +20,4 @@ def logo():
     mimetype = 'image/png'
     if url.endswith('.jpg'):
         mimetype = 'image/jpeg'
-    return Response(requests.get(url).content, mimetype=mimetype)
+    return Response(requests.get(url, verify=not config.iotb.insecure).content, mimetype=mimetype)

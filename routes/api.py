@@ -76,10 +76,14 @@ def onboard():
 
             # create a new user for the account.
             # API DOCS: https://bridge-us.tartabit.com/swaggerui/#/user/createUser
-            result = iotb.client.request('POST', 'user', body={'firstName': new_account_name, 'lastName': new_account_name, 'email': account_id + '@tartabit.com', 'password': account_id+'@A3', 'role': 'admin'},
+            result = iotb.client.request('POST', 'user', body={'firstName': new_account_name, 'lastName': new_account_name, 'emailAddress': account_id + '@tartabit.com', 'password': account_id+'@A3', 'role': 'admin'},
                                          account_id=account_id)
             if result.status == 201:
                 results.append(f"Created user with ID: {result.body['id']}")
+            else:
+                results.append(f"Failed to create user: {result.status} - {result.body}")
+        else:
+            results.append(f"Failed to create account: {result.status} - {result.body}")
     else:
         # lookup an existing account.
         # API DOCS: https://bridge-us.tartabit.com/swaggerui/#/account/getAccount

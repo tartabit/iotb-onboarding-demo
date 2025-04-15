@@ -115,7 +115,7 @@
                 {% for event in events %}
                     <tr>
                         <td>{{ event.ts }}</td>
-                        <td>{{ event.service.name }}</td>
+                        <td>{{ event.service.name if event.service else "-" }}</td>
                         <td>{{ event.type }}</td>
                         <td>
                             <button onclick="toggleData('{{ loop.index }}')">Expand</button>
